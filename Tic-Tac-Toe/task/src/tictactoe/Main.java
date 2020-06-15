@@ -6,11 +6,19 @@ public class Main {
         final TicTacToe area = new TicTacToe();
         final Scanner scanner = new Scanner(System.in);
 
+        System.out.print("Enter cells: ");
         char[] input = scanner.nextLine().trim().toCharArray();
 
         for (char ch : input) {
             area.setArea(ch);
         }
+
+        System.out.println(area.toString());
+
+        System.out.print("Enter the coordinates: ");
+        char[] coords = scanner.nextLine().replaceAll("\\s", "").toCharArray();
+
+
 
         System.out.println(area.toString());
         scanner.close();
@@ -34,6 +42,16 @@ class TicTacToe {
 
         area[this.curPosition / 3][this.curPosition % 3] = ch;
         this.curPosition++;
+    }
+
+    public boolean isOccuped(int x, int y) {
+        boolean res = false;
+        
+        if (this.area[x][y] == 'X' || this.area[x][y] == 'O'){
+            res = true;
+        }
+
+        return res;
     }
 
     public String checkWin() {
@@ -83,9 +101,8 @@ class TicTacToe {
         String line1 = "| " + this.area[0][0] + " " + this.area[0][1] + " " + this.area[0][2] + " |\n";
         String line2 = "| " + this.area[1][0] + " " + this.area[1][1] + " " + this.area[1][2] + " |\n";
         String line3 = "| " + this.area[2][0] + " " + this.area[2][1] + " " + this.area[2][2] + " |\n";
-        String winInfo = this.checkWin();
 
-        return new StringBuilder().append(lineBorder).append(line1).append(line2).append(line3).append(lineBorder).append(winInfo).toString();
+        return new StringBuilder().append(lineBorder).append(line1).append(line2).append(line3).append(lineBorder).toString();
     }
 
 }
