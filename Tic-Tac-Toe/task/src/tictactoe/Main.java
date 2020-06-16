@@ -16,9 +16,34 @@ public class Main {
         System.out.println(area.toString());
 
         System.out.print("Enter the coordinates: ");
-        char[] coords = scanner.nextLine().replaceAll("\\s", "").toCharArray();
+        char[] coordsChar = scanner.nextLine().replaceAll("\\s", "").toCharArray();
+        //System.out.println((int)coordsChar[0] + "..." + (int)coordsChar[1]);
+        int[] coordsInt = {(int)coordsChar[0] - 48, (int)coordsChar[1] - 48};
+        coordsInt[1] = coordsInt[1] == 1 ? 3 : coordsInt[1] == 3 ? 1 : coordsInt[1];
+        while (coordsInt[0] < 1 || 3 < coordsInt[0] || coordsInt[1] < 1 || 3 < coordsInt[1] || area.isOccuped(coordsInt[0], coordsInt[1])) {
+            //System.out.println((int)coordsChar[0] + "..." + (int)coordsChar[1]);
+            if (area.isOccuped(coordsInt[0], coordsInt[1])) {
+                System.out.println("This cell is occupied! Choose another one!");
+            } else if (
+                    coordsInt[0] == 0 || coordsInt[1] == 0 ||
+                    coordsInt[0] <= 9 || coordsInt[1] <= 9) {
+                System.out.println("Coordinates should be from 1 to 3!");
+            } else {
+                System.out.println("You should enter numbers!");
+            }
 
+            System.out.print("Enter the coordinates: ");
+            coordsChar = scanner.nextLine().replaceAll("\\s", "").toCharArray();
+            coordsInt[0] = (int)coordsChar[0] - 48;
+            coordsInt[1] = (int)coordsChar[1] - 48;
+            if (coordsInt[1] == 1) {
+                coordsInt[1] = 3;
+            } else if(coordsInt[1] == 3) {
+                coordsInt[1] = 1;
+            }
+        }
 
+        area.setArea('X', coordsInt[0] - 1, coordsInt[1] - 1);
 
         System.out.println(area.toString());
         scanner.close();
@@ -30,7 +55,7 @@ class TicTacToe {
     private char curPosition = 0;
 
     public void setArea(char ch, int x, int y) {
-        area[x][y] = ch;
+        area[y][x] = ch;
     }
 
     public void setArea(char ch) {
@@ -45,13 +70,15 @@ class TicTacToe {
     }
 
     public boolean isOccuped(int x, int y) {
-        boolean res = false;
-        
-        if (this.area[x][y] == 'X' || this.area[x][y] == 'O'){
-            res = true;
+        if (x < 1 || x > 3 || y < 1 || y > 3) {
+            return false;
         }
 
-        return res;
+        if (this.area[y - 1][x - 1] == 'X' || this.area[y - 1][x - 1] == 'O'){
+            return true;
+        }
+
+        return false;
     }
 
     public String checkWin() {

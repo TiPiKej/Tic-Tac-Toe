@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Problems/Book/Problems-Book.iml" filepath="$PROJECT_DIR$/.idea/modules/Problems/Book/Problems-Book.iml" group="Tic-Tac-Toe/Problems-Book" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Problems/Book/Problems-Book_main.iml" filepath="$PROJECT_DIR$/.idea/modules/Problems/Book/Problems-Book_main.iml" group="Tic-Tac-Toe/Problems-Book" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Problems/Book/Problems-Book_test.iml" filepath="$PROJECT_DIR$/.idea/modules/Problems/Book/Problems-Book_test.iml" group="Tic-Tac-Toe/Problems-Book" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Problems/Fix the program/Problems-Fix_the_program.iml" filepath="$PROJECT_DIR$/.idea/modules/Problems/Fix the program/Problems-Fix_the_program.iml" group="Tic-Tac-Toe/Problems-Fix_the_program" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Problems/Fix the program (1)/Problems-Fix_the_program__1_.iml" filepath="$PROJECT_DIR$/.idea/modules/Problems/Fix the program (1)/Problems-Fix_the_program__1_.iml" group="Tic-Tac-Toe/Problems-Fix_the_program__1_" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Problems/Fix the program (1)/Problems-Fix_the_program__1__main.iml" filepath="$PROJECT_DIR$/.idea/modules/Problems/Fix the program (1)/Problems-Fix_the_program__1__main.iml" group="Tic-Tac-Toe/Problems-Fix_the_program__1_" />
