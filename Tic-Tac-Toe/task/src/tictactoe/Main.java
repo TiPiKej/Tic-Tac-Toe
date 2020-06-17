@@ -6,56 +6,29 @@ public class Main {
         final TicTacToe area = new TicTacToe();
         final Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Enter cells: ");
-        char[] input = scanner.nextLine().trim().toCharArray();
-
-        for (char ch : input) {
-            area.setArea(ch);
+        while (area.checkWin().equals("Game not finished") || area.checkWin().equals("Impossible") || area.checkWin().equals("Draw")) {
+            area.makeMove(scanner);
+            System.out.println(area.toString());
         }
 
-        System.out.println(area.toString());
+        System.out.println(area.checkWin());
 
-        System.out.print("Enter the coordinates: ");
-        char[] coordsChar = scanner.nextLine().replaceAll("\\s", "").toCharArray();
-        //System.out.println((int)coordsChar[0] + "..." + (int)coordsChar[1]);
-        int[] coordsInt = {(int)coordsChar[0] - 48, (int)coordsChar[1] - 48};
-        coordsInt[1] = coordsInt[1] == 1 ? 3 : coordsInt[1] == 3 ? 1 : coordsInt[1];
-        while (coordsInt[0] < 1 || 3 < coordsInt[0] || coordsInt[1] < 1 || 3 < coordsInt[1] || area.isOccuped(coordsInt[0], coordsInt[1])) {
-            //System.out.println((int)coordsChar[0] + "..." + (int)coordsChar[1]);
-            if (area.isOccuped(coordsInt[0], coordsInt[1])) {
-                System.out.println("This cell is occupied! Choose another one!");
-            } else if (
-                    coordsInt[0] == 0 || coordsInt[1] == 0 ||
-                    coordsInt[0] <= 9 || coordsInt[1] <= 9) {
-                System.out.println("Coordinates should be from 1 to 3!");
-            } else {
-                System.out.println("You should enter numbers!");
-            }
-
-            System.out.print("Enter the coordinates: ");
-            coordsChar = scanner.nextLine().replaceAll("\\s", "").toCharArray();
-            coordsInt[0] = (int)coordsChar[0] - 48;
-            coordsInt[1] = (int)coordsChar[1] - 48;
-            if (coordsInt[1] == 1) {
-                coordsInt[1] = 3;
-            } else if(coordsInt[1] == 3) {
-                coordsInt[1] = 1;
-            }
-        }
-
-        area.setArea('X', coordsInt[0] - 1, coordsInt[1] - 1);
-
-        System.out.println(area.toString());
         scanner.close();
     }
 }
 
 class TicTacToe {
-    char[][] area = new char[3][3];
+    char[][] area;
     private char curPosition = 0;
+    boolean userX = true; // true - X, false - O
 
-    public void setArea(char ch, int x, int y) {
-        area[y][x] = ch;
+    public TicTacToe() {
+        area = new char[3][3];
+    }
+
+    public void setArea(int x, int y) {
+        area[y][x] = this.userX ? 'X' : 'O';
+        this.userX = !this.userX;
     }
 
     public void setArea(char ch) {
@@ -81,6 +54,41 @@ class TicTacToe {
         return false;
     }
 
+    public void makeMove(Scanner scanner) {
+        // get first vars
+        System.out.print("Enter the coordinates: ");
+        char[] coordsChar = scanner.nextLine().replaceAll("\\s", "").toCharArray();
+        int[] coordsInt = {(int)coordsChar[0] - 48, (int)coordsChar[1] - 48};
+        // parse coords
+        coordsInt[1] = coordsInt[1] == 1 ? 3 : coordsInt[1] == 3 ? 1 : coordsInt[1];
+        // verification
+        while (coordsInt[0] < 1 || 3 < coordsInt[0] || coordsInt[1] < 1 || 3 < coordsInt[1] || this.isOccuped(coordsInt[0], coordsInt[1])) {
+            if (this.isOccuped(coordsInt[0], coordsInt[1])) { // check if is in use
+                System.out.println("This cell is occupied! Choose another one!");
+            } else if (
+                    coordsInt[0] == 0 || coordsInt[1] == 0 ||
+                    coordsInt[0] <= 9 || coordsInt[1] <= 9) { // check if user type number between 1 to 3
+                System.out.println("Coordinates should be from 1 to 3!");
+            } else {
+                System.out.println("You should enter numbers!");
+            }
+
+            // getting another variables
+            System.out.print("Enter the coordinates: ");
+            coordsChar = scanner.nextLine().replaceAll("\\s", "").toCharArray();
+            coordsInt[0] = (int)coordsChar[0] - 48;
+            coordsInt[1] = (int)coordsChar[1] - 48;
+            // parsing
+            if (coordsInt[1] == 1) {
+                coordsInt[1] = 3;
+            } else if(coordsInt[1] == 3) {
+                coordsInt[1] = 1;
+            }
+        }
+        // setting move
+        this.setArea(coordsInt[0] - 1, coordsInt[1] - 1);
+    }
+
     public String checkWin() {
 //      possible variations of wins
 //      1       2       3       4       5       6       7       8
@@ -101,17 +109,22 @@ class TicTacToe {
                     else oSet++;
                 }
             }
-            if (area[i][0] == area[i][1] && area[i][1] == area[i][2]) { // 1,2,3
+
+            if (area[i][1] == '\u0000') {
+                continue;
+            }
+
+            if (area[i][0] == area[i][1] && area[i][1] == area[i][2] && area[i][1] != '\u0000') { // 1,2,3
                 wins++;
                 winChar = area[i][0];
             }
-            if (area[0][i] == area[1][i] && area[1][i] == area[2][i]) { // 4,5,6
+            if (area[0][i] == area[1][i] && area[1][i] == area[2][i] && area[1][i] != '\u0000') { // 4,5,6
                 wins++;
                 winChar = area[0][i];
             }
         }
 
-        if (area[0][0] == area[1][1] && area[1][1] == area[2][2] || area[0][2] == area[1][1] && area[1][1] == area[2][0]) { // 7,8
+        if (area[1][1] != '\u0000' && area[0][0] == area[1][1] && area[1][1] == area[2][2] || area[1][1] != '\u0000' && area[0][2] == area[1][1] && area[1][1] == area[2][0]) { // 7,8
             wins++;
             winChar = area[1][1];
         }
@@ -125,9 +138,9 @@ class TicTacToe {
     @Override
     public String toString() {
         String lineBorder = "---------\n";
-        String line1 = "| " + this.area[0][0] + " " + this.area[0][1] + " " + this.area[0][2] + " |\n";
-        String line2 = "| " + this.area[1][0] + " " + this.area[1][1] + " " + this.area[1][2] + " |\n";
-        String line3 = "| " + this.area[2][0] + " " + this.area[2][1] + " " + this.area[2][2] + " |\n";
+        String line1 = "| " + (this.area[0][0] == '\u0000' ? " " : this.area[0][0]) + " " + (this.area[0][1] == '\u0000' ? " " : this.area[0][1]) + " " + (this.area[0][2] == '\u0000' ? " " : this.area[0][2]) + " |\n";
+        String line2 = "| " + (this.area[1][0] == '\u0000' ? " " : this.area[1][0]) + " " + (this.area[1][1] == '\u0000' ? " " : this.area[1][1]) + " " + (this.area[1][2] == '\u0000' ? " " : this.area[1][2]) + " |\n";
+        String line3 = "| " + (this.area[2][0] == '\u0000' ? " " : this.area[2][0]) + " " + (this.area[2][1] == '\u0000' ? " " : this.area[2][1]) + " " + (this.area[2][2] == '\u0000' ? " " : this.area[2][2]) + " |\n";
 
         return new StringBuilder().append(lineBorder).append(line1).append(line2).append(line3).append(lineBorder).toString();
     }
